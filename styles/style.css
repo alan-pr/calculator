@@ -1,0 +1,199 @@
+@font-face {
+    font-family: '8-BIT-WONDER';
+    src: url('fonts/8-BIT-WONDER.TTF');
+}
+body {
+    background: url('images/desk.png') no-repeat;
+    background-size: cover;
+}
+
+.cup {
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    top: -100px;
+
+    background: url('images/cup.png') no-repeat;
+    transform: rotate(45deg);
+    background-size: cover;
+}
+
+.phone {
+    position: absolute;
+    display: grid;
+    width: 250px;
+    height: 430px;
+    top: 500px;
+    left: 100px;
+
+    grid-template-columns: 17px auto 16px;
+    grid-template-rows: 45px auto 73px;
+
+    transform: rotate(-25deg);
+    background: url('images/phone.png') no-repeat;
+    background-size: cover;
+}
+
+.notebook {
+    position: absolute;
+    width: 550px;
+    height: 700px;
+    top: 200px;
+    left: 600px;
+
+    background: url('images/notebook.png') no-repeat;
+    background-size: cover;
+}
+
+.note-title {
+    position: relative;
+    text-align: center;
+
+    font-family: 'Tangerine', cursive;
+    font-weight: bold;
+    font-size: xx-large;
+}
+.note-line1, .note-line2 {
+    position: relative;
+    
+
+    font-family: 'Tangerine', cursive;
+    font-weight: bold;
+    font-size: xx-large;
+}
+
+.page {
+    position: relative;
+    width: 380px;
+    height: 590px;
+    top:-35px;
+    left: 105px;
+
+    word-wrap:break-word;
+    font-family: 'Tangerine', cursive;
+    font-size: x-large;
+    background-color: #f7f7f7;
+}
+
+.pen {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    top: 250px;
+    right: 150px;
+
+    background: url('images/pen.png') no-repeat;
+}
+
+.pencil {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    top: 300px;
+    right: 100px;
+
+    background: url('images/pencil.png') no-repeat;
+}
+
+.screen {
+    display: grid;
+
+    grid-template-columns: auto;
+    grid-template-rows: 100px auto;
+
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 2;
+    grid-row-end: 3;
+
+    background-color: dimgrey;
+}
+
+.digit-screen {
+    width: 100%;
+    text-align: right;
+    grid-column-start: 1;
+    grid-column-end: end;
+    grid-row-start: 1;
+    grid-row-end: 2;
+
+    word-wrap: break-word;
+    overflow: auto;
+    zoom: 1;
+
+
+    background-color: darkslategray;
+    color: goldenrod;
+    font-weight: bold;
+    font-style: italic;
+    font-family: '8-BIT-WONDER', monospace;
+    font-size: xx-large;
+}
+
+.digit-screen::-webkit-scrollbar {
+    background-color: black;
+}
+.digit-screen::-webkit-scrollbar-thumb {
+    background-color: goldenrod;
+}
+
+.pad {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: space-around;
+    justify-content: space-around;
+
+    grid-column-start: 1;
+    grid-column-end: end;
+    grid-row-start: 2;
+    grid-row-end: 3;
+
+    background-color: black;
+}
+
+.btn-pad {
+    width: 50px;
+    height: 40px;
+    
+    background-color: darkgrey;
+    border-radius: 50%;
+}
+
+.btn-pad:hover {
+    background-color: lightgrey;
+    cursor: pointer;
+}
+
+.btn-pad:active {
+    transform: scale(0.8);
+}
+
+.btn-top {
+    background-color: lightgrey;
+}
+
+.btn-top:hover {
+    background-color: rgb(235, 228, 228);
+}
+
+.btn-side {
+    background-color: orange;
+    color: white;
+}
+
+.btn-side:hover {
+    background-color: rgb(248, 191, 85);
+}
+
+#btn-n0 {
+    width: 100px;
+    border-radius: 100px;
+}
+
+.btn-txt {
+    text-align: center;
+    font-family: Ubuntu, 'Open Sans';
+    font-size: small;
+    font-weight: bold;
+    user-select: none;
+}
