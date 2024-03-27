@@ -3,6 +3,8 @@ const pad = document.querySelector('.pad');
 const phone = {screen: screen, pad: pad};
 const buttons = Array.from(phone.pad.childNodes).filter(node => {return node.nodeName != '#text'});
 const page = document.querySelector('.page');
+const screenFontDefaultSize = parseInt(window.getComputedStyle(phone.screen).fontSize);
+const screenDigitsLimit = 17;
 
 let floatInserted = false;
 let thereIsAFloat = false;
@@ -12,24 +14,27 @@ let isDone = false;
 let remainingString = '';
 let gotError = false;
 let answer;
+let screenFontSize = screenFontDefaultSize;
+
+cleanScreen();
 
 buttons.forEach(button => {
     button.addEventListener('click', e => {
-        if (/[0-9]/.test(button.innerText)) addNumber(button.innerText);
+        if (/[0-9]/.test(button.innerText) && phone.screen.innerText.length < screenDigitsLimit) addNumber(button.innerText);
         else if (button.id == 'btn-clear') cleanScreen();
-        else if (/[/X\-+]/.test(button.innerText) && button.id != 'btn-sign') addOperator(button.innerText);
-        else if (button.id == 'btn-float') addFloat();
+        else if (/[/X\-+]/.test(button.innerText) && button.id != 'btn-sign' && phone.screen.innerText.length < screenDigitsLimit) addOperator(button.innerText);
+        else if (button.id == 'btn-float' && phone.screen.innerText.length < screenDigitsLimit) addFloat();
         else if (button.id == 'btn-equal') operate();
-        else if (button.id == 'btn-sign') changeSign();
+        else if (button.id == 'btn-sign' && phone.screen.innerText.length < screenDigitsLimit) changeSign();
         else if (button.id == 'btn-history') cleanHistory();
     });
 });
 
 window.addEventListener('keydown', e => {
-    if (/^[0-9]$/.test(e.key)) addNumber(e.key);
-    else if (/[/*\-+]/.test(e.key)) addOperator(e.key);
+    if (/^[0-9]$/.test(e.key) && phone.screen.innerText.length < screenDigitsLimit) addNumber(e.key);
+    else if (/[/*\-+]/.test(e.key) && phone.screen.innerText.length < screenDigitsLimit) addOperator(e.key);
     else if (e.key == 'Backspace' || e.key == 'Delete') cleanScreen();
-    else if (e.key == '.') addFloat();
+    else if (e.key == '.' && phone.screen.innerText.length < screenDigitsLimit) addFloat();
     else if (e.key == '=' || e.key == 'Enter') operate();
 });
 
@@ -38,14 +43,20 @@ function addNumber(number) {
     if (gotError) return;
 
     zoomOut();
-    phone.screen.innerText += number;
+
+    if (phone.screen.innerText == '0') {
+        if (number != '0')
+            phone.screen.innerText = number;
+    } else {
+        phone.screen.innerText += number;
+    }
     inputString += number;
 }
 
 
 function cleanScreen() {
-    phone.screen.innerText = '';
-    phone.screen.style.zoom = 1;
+    phone.screen.innerText = '0';
+    zoomIn();
     inputString = '';
     inputArray = [];
     floatInserted = false;
@@ -62,22 +73,12 @@ function changeSign() {
     if (gotError) return;
 
     let text = phone.screen.innerText;
-
+    
     if (/[0-9]+/.test(inputString)) {
         inputString = parseInt(inputString) * -1;
     }
-
-    if (/[\+\-\*\/]/.test(text)) {
-        for (let i=0; i<text.length; i++) {
-            if (/[^0-9]/.test(text[i])) {
-                let index = text.indexOf(text[i]);
-                phone.screen.innerText = text.slice(0, index+1);
-                phone.screen.innerText += inputString;
-            }
-        }
-    } else {
-        phone.screen.innerText = inputString;
-    }
+    
+    phone.screen.innerText = inputString;
 }
 
 
@@ -151,12 +152,18 @@ function addFloat() {
 
 
 function zoomOut() {
-    if (!phone.screen.style.zoom) phone.screen.style.zoom = 1;
-    if (phone.screen.innerText.length == 6 || phone.screen.innerText.length == 8 ||
-        phone.screen.innerText.length == 10)
-        {
-            phone.screen.style.zoom -= 0.2;
+    console.log(screenFontSize);
+    if (screenFontSize == 32 && phone.screen.innerText.length > 5) {
+        screenFontSize -= 14;
+    } else if (screenFontSize == 18 && phone.screen.innerText.length > 10) {
+        screenFontSize -= 6;
     }
+    phone.screen.style.fontSize = `${screenFontSize}px`;
+};
+
+function zoomIn() {
+    screenFontSize = screenFontDefaultSize;
+    phone.screen.style.fontSize = `${screenFontSize}px`;
 }
 
 
@@ -173,7 +180,6 @@ function operate() {
     const op = inputArray[1];
     
     let result;
-
 
     if (!thereIsAFloat && inputArray.length == 3) {
         if (op == '+') result = parseInt(a) + parseInt(b);
